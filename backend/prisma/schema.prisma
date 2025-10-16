@@ -1,0 +1,158 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  Voter
+  Candidate
+}
+
+enum PostType {
+  Post
+  Reel
+}
+
+model Governorate {
+  id        String   @id
+  name      String
+  enName    String
+  slug      String   @unique
+  path      String?
+  users     User[]
+  events    Event[]
+  stats     GovernorateStatistic?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id           String      @id
+  name         String
+  avatarUrl    String
+  role         UserRole
+  verified     Boolean     @default(false)
+  party        String
+  governorate  Governorate @relation(fields: [governorateId], references: [id])
+  governorateId String
+  bio          String?
+  posts        Post[]
+  organized    Event[]     @relation("UserOrganizedEvents")
+  debates      DebateParticipant[]
+  candidate    Candidate?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Post {
+  id            String        @id
+  author        User          @relation(fields: [authorId], references: [id])
+  authorId      String
+  timestamp     DateTime      @default(now())
+  content       String
+  mediaUrl      String?
+  likes         Int           @default(0)
+  comments      Int           @default(0)
+  shares        Int           @default(0)
+  isSponsored   Boolean       @default(false)
+  type          PostType
+  governorates  String[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Event {
+  id            String     @id
+  title         String
+  date          DateTime
+  location      String
+  organizer     User       @relation("UserOrganizedEvents", fields: [organizerId], references: [id])
+  organizerId   String
+  governorate   Governorate @relation(fields: [governorateId], references: [id])
+  governorateId String
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+model Article {
+  id             String    @id
+  source         String
+  timestamp      DateTime
+  title          String
+  authorName     String
+  contentSnippet String
+  url            String
+  governorates   String[]
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Debate {
+  id            String              @id
+  title         String
+  topic         String
+  scheduledTime DateTime
+  isLive        Boolean             @default(false)
+  participants  DebateParticipant[]
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+}
+
+model DebateParticipant {
+  debateId String
+  userId   String
+  debate   Debate @relation(fields: [debateId], references: [id])
+  user     User   @relation(fields: [userId], references: [id])
+
+  @@id([debateId, userId])
+}
+
+model Party {
+  id          String      @id
+  name        String
+  logoUrl     String
+  leader      String
+  founded     Int
+  description String
+  candidates  Candidate[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Candidate {
+  id               String   @id
+  user             User     @relation(fields: [userId], references: [id])
+  userId           String   @unique
+  party            Party    @relation(fields: [partyId], references: [id])
+  partyId          String
+  platformSummary  String?
+  votes            Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model GovernorateStatistic {
+  governorate   Governorate @relation(fields: [governorateId], references: [id])
+  governorateId String      @id
+  registeredVoters Int
+  pollingStations Int
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model GovernorateParticipation {
+  id              Int      @id @default(autoincrement())
+  governorateId   String
+  governorateName String
+  estimatedTurnout Int
+}
+
+model DashboardSnapshot {
+  id        Int      @id @default(1)
+  metrics   Json
+  updatedAt DateTime @updatedAt
+}
