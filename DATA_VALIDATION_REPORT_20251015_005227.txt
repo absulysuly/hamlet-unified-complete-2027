@@ -1,0 +1,113 @@
+﻿HAMLET PROJECT - DATA VALIDATION REPORT
+Generated: 2025-10-15 00:52:27
+
+========================================
+MASTER CANDIDATE FILE ANALYSIS
+========================================
+
+[English FILE]
+  Path: E:\HamletUnified\clean_election_data\ElectionCandidates_English.csv
+  Rows: 7769
+  Columns (8): رقم الاقتراع الحزب, الحزب, رقم الاقتراع للمرشح, ا نوع الترشيح, الدائرة الانتخابية, الجنس, إسم المرشح الكامل, الرقم
+  Sample Row 1:
+    - رقم الاقتراع الحزب = 216
+    - الحزب = الحزب الاشيراكي الديمقراطي الكوردستانني
+    - رقم الاقتراع للمرشح = 1
+    - ا نوع الترشيح = الترشيح
+    - الدائرة الانتخابية = 
+
+[Original FILE]
+  Path: E:\HamletUnified\clean_election_data\ElectionCandidates_Original.csv
+  Rows: 7769
+  Columns (10): A, Name on ballot, Candidate
+
+Sequence, H1,    Type
+      Nominat-
+            ion, Electoral
+district, H2, Sex, Candidate's full name, Voter number
+  Sample Row 1:
+    - A = 216 
+    - Name on ballot = Kurdistan Democratic Party
+    - Candidate
+
+Sequence = 1 
+    - H1 = 
+    -    Type
+      Nominat-
+            ion = Party
+
+[Kurdish_Arabic FILE]
+  Path: E:\HamletUnified\لۆڤلی (2).csv
+  Rows: 7769
+  Columns (8): 0, ورقة الاقتراع. الإسم في, تسلسل
+المرشح, نوع
+الترشيح, الدائرة
+الانتخابية, الجنس, إسم المرشح الكامل, رقم الناخب
+  Sample Row 1:
+    - 0 = 216 
+    - ورقة الاقتراع. الإسم في = الحزب الاشيراكي الديمقراطي الكوردستانني
+    - تسلسل
+المرشح = 1 
+    - نوع
+الترشيح = حزب
+    - الدائرة
+الانتخابية = اربيل
+
+========================================
+DATA RECONCILIATION ANALYSIS
+========================================
+
+Row Count Comparison:
+  Original: 7769 rows
+  English:  7769 rows
+  Difference: 0 rows
+
+[WARNING] No standard ID column found. Cannot check duplicates automatically.
+Available columns: A, Name on ballot, Candidate
+
+Sequence, H1,    Type
+      Nominat-
+            ion, Electoral
+district, H2, Sex, Candidate's full name, Voter number
+
+========================================
+COLUMN STRUCTURE COMPARISON
+========================================
+
+Original columns (10): A, Name on ballot, Candidate
+
+Sequence, H1,    Type
+      Nominat-
+            ion, Electoral
+district, H2, Sex, Candidate's full name, Voter number
+
+English columns (8): رقم الاقتراع الحزب, الحزب, رقم الاقتراع للمرشح, ا نوع الترشيح, الدائرة الانتخابية, الجنس, إسم المرشح الكامل, الرقم
+
+Columns ONLY in Original: A, Name on ballot, Candidate
+
+Sequence, H1,    Type
+      Nominat-
+            ion, Electoral
+district, H2, Sex, Candidate's full name, Voter number
+
+Columns ONLY in English: رقم الاقتراع الحزب, الحزب, رقم الاقتراع للمرشح, ا نوع الترشيح, الدائرة الانتخابية, الجنس, إسم المرشح الكامل, الرقم
+
+========================================
+DIRECTOR'S RECOMMENDATIONS
+========================================
+
+[RECOMMENDATION] Master Data Source:
+
+[RECOMMENDATION] Bilingual Strategy:
+  - Original.csv = Arabic/Kurdish names (authoritative)
+  - English.csv = Translated names for outreach
+  - Action: Merge both files with ID matching
+  - Result: One master file with both language versions
+
+[NEXT STEPS]
+1. Review this validation report
+2. Deduplicate Original file if needed
+3. Merge Original + English into master bilingual file
+4. Proceed with MVP testing
+5. Begin social media collection on clean master file
+

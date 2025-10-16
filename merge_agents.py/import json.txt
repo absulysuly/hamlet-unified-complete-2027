@@ -1,0 +1,37 @@
+import json
+import pathlib
+
+# Set output folder
+out = pathlib.Path("E:/HamletUnified/processed/output")
+out.mkdir(exist_ok=True)
+
+# Load all 4 agent JSON files
+all_records = []
+for i in range(1, 5):
+    file_path = out / f"agent{i}.json"
+    if file_path.exists():
+        data = json.loads(file_path.read_text(encoding="utf-8"))
+        all_records.extend(data)
+        print(f"✅ Loaded {len(data)} records from agent{i}.json")
+    else:
+        print(f"⚠️  Missing: {file_path}")
+
+# Remove duplicates by Voter number
+seen = set()
+unique = []
+for record in all_records:
+    vid = record.get("Voter number")
+    if vid and vid not in seen:
+        seen.add(vid)
+        unique.append(record)
+
+# Save master dataset
+final_path = out / "iraqi_election_candidates.json"
+final_path.write_text(
+    json.dumps(unique, ensure_ascii=False, indent=2),
+    encoding="utf-8"
+)
+
+print(f"\n🎉 MASTER DATASET READY!")
+print(f"Total unique candidates: {len(unique)}")
+print(f"Saved to: {final_path}")

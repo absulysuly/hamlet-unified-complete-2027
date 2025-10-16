@@ -1,0 +1,58 @@
+{
+  "workspaces": [
+    {
+      "name": "MVP Finalization Workspace",
+      "folder": "E:\\HamletUnified\\Copy-of-Hamlet-social",
+      "agents": [
+        {
+          "name": "Bug Fixer",
+          "role": "Check the MVP code for critical bugs, Tailwind styling issues, and mobile responsiveness problems. Make fixes without altering the interface or breaking functionality. Log changes in docs/daily-reports."
+        },
+        {
+          "name": "QA Tester",
+          "role": "Run smoke tests on all routes. Verify filters, women badge, Tailwind styling, and mobile layout. Report issues to Bug Fixer."
+        },
+        {
+          "name": "Deployment Manager",
+          "role": "Use deploy.ps1 to build and push the MVP safely. Confirm production deployment on Vercel. Log outcomes in docs/daily-reports."
+        }
+      ]
+    },
+    {
+      "name": "Command Center Workspace",
+      "folder": "E:\\HamletUnified\\Copy-of-Hamlet-social\\docs",
+      "agents": [
+        {
+          "name": "Data Manager",
+          "role": "Maintain candidate_data/candidates.csv with verified candidate pages and party links. Mark verified entries, flag duplicates, and keep it updated daily."
+        },
+        {
+          "name": "Researcher",
+          "role": "Collect publicly available Facebook pages, party pages, and official URLs for all candidates in Iraq elections 2025. Verify accuracy, log sources, and update candidates.csv."
+        },
+        {
+          "name": "Documentation Writer",
+          "role": "Log all sources, verification steps, and updates to candidate_data/candidates.csv in docs/daily-reports. Keep logs timestamped and clear."
+        }
+      ]
+    },
+    {
+      "name": "Advanced Features Workspace",
+      "folder": "E:\\HamletUnified\\Copy-of-Hamlet-social",
+      "agents": [
+        {
+          "name": "AI Prompt Manager",
+          "role": "Read candidate_data/candidates.csv and generate personalized, friendly outreach messages for each candidate. Save drafts to candidate_data/outreach_drafts. Only use public information."
+        },
+        {
+          "name": "Feature Developer",
+          "role": "Create a script that reads candidates.csv and automatically tags candidates in posts (hashtags, friendly mentions) without exposing private data. Ensure integration with MVP workflow."
+        },
+        {
+          "name": "Integration Specialist",
+          "role": "Ensure AI output integrates with MVP workflow. Update candidate_data/candidates.csv statuses when outreach is ready. Log all actions for review."
+        }
+      ]
+    }
+  ]
+}

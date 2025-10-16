@@ -1,0 +1,56 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Women in Politics API",
+    "version": "1.0.0",
+    "description": "API documentation for the election platform backend"
+  },
+  "paths": {
+    "/api/candidates/women": {
+      "get": {
+        "summary": "Get women candidates",
+        "description": "Returns a list of all women candidates with basic information",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Candidate"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Candidate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "party": {
+            "type": "string"
+          },
+          "district": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string",
+            "enum": ["F", "M"]
+          }
+        }
+      }
+    }
+  }
+}

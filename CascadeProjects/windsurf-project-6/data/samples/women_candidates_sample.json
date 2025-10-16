@@ -1,0 +1,29 @@
+[
+  {
+    "id": "CAN001",
+    "name": "Maria Gonzalez",
+    "party": "Progressive",
+    "district": "North Metro",
+    "gender": "F",
+    "photoUrl": "/images/candidates/CAN001.jpg",
+    "bio": "Education reform advocate with 10 years experience in local government."
+  },
+  {
+    "id": "CAN002",
+    "name": "Aisha Johnson",
+    "party": "Unity",
+    "district": "South Central",
+    "gender": "F",
+    "photoUrl": "/images/candidates/CAN002.jpg",
+    "bio": "Healthcare professional running on platform of universal coverage."
+  },
+  {
+    "id": "CAN003",
+    "name": "Elena Rodriguez",
+    "party": "Green",
+    "district": "West Hills",
+    "gender": "F",
+    "photoUrl": "/images/candidates/CAN003.jpg",
+    "bio": "Environmental scientist focused on sustainable development policies."
+  }
+]
