@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: hamlet-backend-api
+    env: docker
+    plan: starter
+    region: oregon
+    branch: main
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
+    autoDeploy: true
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4001
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: NEXT_PUBLIC_API_BASE_URL
+        sync: false
