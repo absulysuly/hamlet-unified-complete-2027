@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "name": "hamlet-unified",
+  "builds": [
+    {
+      "src": "test-new-frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "test-new-frontend/dist"
+      }
+    },
+    {
+      "src": "backend/src/index.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "backend/src/index.ts"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "test-new-frontend/dist/$1"
+    }
+  ],
+  "env": {
+    "NODE_VERSION": "18.x"
+  }
+}
