@@ -1,0 +1,14 @@
+node_modules
+.git
+.env
+.env.local
+*.log
+CascadeProjects
+processed
+tools
+data_backup_*
+clean_election_data/archive
+backend/src
+backend/dist
+backend/node_modules
+
