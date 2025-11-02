@@ -1,19 +1,20 @@
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
-import { Noto_Sans, Noto_Sans_Arabic } from 'next/font/google';
+// Temporarily disabled Google Fonts for offline build
+// import { Noto_Sans, Noto_Sans_Arabic } from 'next/font/google';
 import './globals.css';
 
-const notoSans = Noto_Sans({
-  subsets: ['latin'],
-  variable: '--font-noto-sans',
-  display: 'swap',
-});
+// const notoSans = Noto_Sans({
+//   subsets: ['latin'],
+//   variable: '--font-noto-sans',
+//   display: 'swap',
+// });
 
-const notoSansArabic = Noto_Sans_Arabic({
-  subsets: ['arabic'],
-  variable: '--font-noto-sans-arabic',
-  display: 'swap',
-});
+// const notoSansArabic = Noto_Sans_Arabic({
+//   subsets: ['arabic'],
+//   variable: '--font-noto-sans-arabic',
+//   display: 'swap',
+// });
 
 export const metadata: Metadata = {
   title: 'Iraq Compass',
@@ -27,7 +28,7 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en" className={`${notoSans.variable} ${notoSansArabic.variable}`}>
+    <html lang="en">
       <body>{children}</body>
     </html>
   );

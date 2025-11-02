@@ -1,9 +1,6 @@
 ﻿/** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
-  experimental: {
-    appDir: true,
-  },
+  output: 'export',
   typescript: {
     ignoreBuildErrors: false,
   },
@@ -13,7 +10,9 @@ const nextConfig = {
   images: {
     domains: ['localhost'],
     unoptimized: true
-  }
+  },
+  // Cloudflare Pages requires trailing slashes
+  trailingSlash: true,
 }
 
-module.exports = nextConfig
+export default nextConfig

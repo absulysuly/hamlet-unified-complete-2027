@@ -87,6 +87,9 @@ export const CityGuide = () => {
            },
         });
 
+        if (!response.text) {
+          throw new Error('No response text received');
+        }
         const jsonStr = response.text.trim();
         const plan = JSON.parse(jsonStr);
         setJourneyPoints(plan.waypoints);

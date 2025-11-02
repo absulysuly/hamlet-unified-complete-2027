@@ -1,0 +1,17 @@
+name = "digital-democracy-iraq"
+compatibility_date = "2025-11-02"
+
+[pages]
+# Directory containing your static files after build
+pages_build_output_dir = "out"
+
+# Build configuration
+[build]
+command = "npm run build"
+
+# Environment variables (add any required env vars here)
+[env.production.vars]
+# Add your production environment variables here
+
+[env.preview.vars]
+# Add your preview environment variables here
