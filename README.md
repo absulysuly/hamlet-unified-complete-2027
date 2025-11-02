@@ -1,62 +1,67 @@
-# Hamlet – Social Shell & Serious Experience Embed
+# Hamlet Social Frontend
 
-This project now hosts the **social experience** and, under the "Serious" tab, embeds the full civic application copied from `hamlat-forntend-6-10/`. The serious view loads inside the social shell via `components/serious/SeriousExperience.tsx`, preserving the civic branding while sharing the same API client and schema contracts.
+A Next.js 15 application that powers the Hamlet civic discovery experience. The app renders a polished social landing page with bilingual support, business discovery tooling, and an accessible, high-contrast browsing mode.
 
-## Project Structure
+## Getting started
 
-The application is a modern, single-page application built with React and TypeScript, styled with Tailwind CSS. It operates without a traditional build tool like Vite or Create React App, using ES modules directly in the browser via an `importmap`.
-
-```
-/
-├── components/
-│   ├── icons/
-│   │   └── Icons.tsx         # SVG icons as React components
-│   ├── views/
-│   │   ├── compose/
-│   │   │   ├── EventComposer.tsx # UI for creating events
-│   │   │   └── ReelComposer.tsx  # UI for creating reels
-│   │   ├── CandidatesView.tsx  # View for listing candidates
-│   │   ├── CandidateProfileView.tsx # Detailed view for a single candidate
-│   │   ├── ComposeView.tsx     # Main post composer UI
-│   │   ├── DebatesView.tsx     # View for listing debates
-│   │   ├── ...and other views...
-│   ├── BottomBar.tsx         # Mobile navigation
-│   ├── CandidatePill.tsx     # Compact candidate display component
-│   ├── Header.tsx            # Main application header
-│   ├── HeroSection.tsx       # Image carousel on the home page
-│   ├── LanguageSwitcher.tsx  # UI for changing language
-│   ├── LoginModal.tsx        # Login/Registration modal
-│   ├── PostCard.tsx          # Component for displaying a single post
-│   ├── Sidebar.tsx           # Desktop sidebar navigation
-│   ├── Stories.tsx           # Horizontal stories component
-│   └── TopNavBar.tsx         # Reusable tab navigation
-├── services/
-│   └── geminiService.ts      # Service for interacting with the Google Gemini API
-├── App.tsx                   # Main application component, manages state and views
-├── constants.ts              # Mock data for users, posts, etc.
-├── index.html                # The single HTML entry point
-├── index.tsx                 # Renders the React application
-├── translations.ts           # Contains all UI text for EN, KU, AR
-└── types.ts                  # TypeScript type definitions
+```bash
+npm install
+npm run dev
 ```
 
-## Key Files & Features
+The development server runs at <http://localhost:3000>. Run a production build with `npm run build` and start the optimized server via `npm run start`.
 
--   **`App.tsx`**: The core of the application. It manages all major state, including the current user, active view, selected language, and modal visibility. This is the central hub for application logic.
--   **`components/views/HomeView.tsx`**: The main dashboard that users see. It aggregates multiple components like the `HeroSection`, `Stories`, and the main content feed, which is tabbed to show Posts, Reels, Events, etc.
--   **`constants.ts`**: Currently, all data is mocked and stored here. This file is the primary target for replacement when integrating a backend.
--   **`translations.ts`**: A simple but effective internationalization (i18n) solution. All display text is pulled from this file based on the selected language.
--   **Guest Mode & Login Flow**: The app starts in a "guest" mode where content is viewable. Interactions (liking, commenting, viewing reels) are intercepted by the `requestLogin` function, which opens the `LoginModal` to encourage sign-ups.
+### Environment variables
 
+Create a `.env.local` file in the project root and define the following variables:
 
-## Serious Experience Integration
+```bash
+NEXT_PUBLIC_API_BASE_URL=https://hamlet-unified-complete-2027-production.up.railway.app
+NEXT_PUBLIC_BACKUP_API_URL=https://winter-leaf-f532.safaribosafar.workers.dev
+# Optional: required for the AI powered journey planner in the City Guide module
+NEXT_PUBLIC_GEMINI_API_KEY=your-google-gemini-api-key
+```
 
-- `components/views/SeriousnessView.tsx` now wraps the full civic app by rendering `components/serious/SeriousExperience.tsx`.
-- The civic modules (pages, hooks, services) live under `components/serious/` and reuse the shared API client via `components/serious/services/apiClient.ts`.
-- Language direction and styling remain scoped within the memory router, so switching to the Serious tab leaves the social UI unchanged while presenting the civic design.
+The Gemini API key is only needed to generate itineraries inside the City Guide. When it is missing the UI remains functional but explains why AI powered journeys are disabled.
 
-## Environment & API Client Setup
+## Project structure
 
-- **Environment variables**: Copy `.env.example` to `.env` and set `VITE_API_BASE_URL` to your backend (default `http://localhost:4001/api` since the dev server now runs on port `4001`). Toggle real vs mock data by setting `VITE_USE_MOCKS=false`.
-- **API client**: Social and serious modules both rely on `services/apiClient.ts::apiRequest()`. It attempts real HTTP calls first and falls back to civic mock generators (`components/serious/services/api.ts`) when mocks are enabled or requests fail.
-- **Shared schema**: Types are imported from `../shared-schema/types.ts` via `types.ts` to keep both experiences aligned with backend contracts.
+```
+app/
+  layout.tsx        # Global layout, font loading, metadata
+  page.tsx          # Client entry point that wires all feature modules together
+components/
+  AuthModal.tsx
+  BusinessDirectory.tsx
+  CityGuide.tsx
+  ...               # Shared client components
+hooks/
+  useTranslations.ts # Translation context and helpers (EN, AR, KU)
+lib/
+  constants.tsx      # Mock data, translations, and static content
+  ...
+types/
+  index.ts           # Shared TypeScript contracts
+```
+
+Tailwind CSS is configured through `tailwind.config.ts` and processed locally via PostCSS (`postcss.config.mjs`). Global styles live in `app/globals.css`.
+
+## Key features
+
+- **Translation provider** – a client-side context with persistence that keeps the UI synchronized across English, Arabic, and Kurdish.
+- **Governorate-aware discovery** – filtering support that prepares integration with the production APIs exposed at the configured `NEXT_PUBLIC_API_BASE_URL`.
+- **Inclusive access tools** – high-contrast mode, contrast checker, and feature filters surface accessible events and services.
+- **AI journey planner** – optional integration with Google’s Gemini models for generating travel itineraries.
+
+## Scripts
+
+| Command        | Description                          |
+| -------------- | ------------------------------------ |
+| `npm run dev`  | Start the Next.js development server |
+| `npm run build`| Create an optimized production build |
+| `npm run start`| Run the production build locally     |
+| `npm run lint` | Execute Next.js lint checks          |
+
+## Deployment notes
+
+The project outputs a standalone build (`next.config.js`) suitable for containerized hosting. Ensure `NEXT_PUBLIC_*` variables are set in the deployment environment so that runtime fetches point at the desired API tier.
