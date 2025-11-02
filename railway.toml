@@ -1,9 +1,9 @@
 ﻿[build]
 builder = "nixpacks"
-buildCommand = "npm run build"
+buildCommand = "cd backend && npm install && npx prisma generate"
 
 [deploy]
-startCommand = "npm start"
+startCommand = "cd backend && npx prisma migrate deploy && node dist/index.js"
 
 [environments]
   [environments.production]
