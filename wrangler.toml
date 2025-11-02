@@ -9,9 +9,7 @@ name = "hamlet-backend-gateway"
 
 [env.production.vars]
 RAILWAY_BACKEND_URL = "https://hamlet-unified-complete-2027-production.up.railway.app"
-
-# Optional: Configure backup backend
-# BACKUP_BACKEND_URL = "https://backup-backend.example.com"
+BACKUP_BACKEND_URL = "https://winter-leaf-f532.safaribosafar.workers.dev"
 
 # Routes - Deploy to your custom domain or workers.dev subdomain
 # Uncomment and configure your domain
