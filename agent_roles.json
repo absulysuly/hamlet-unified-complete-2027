@@ -1,0 +1,192 @@
+{
+  "deployment_system": {
+    "name": "Hamlet Unified Deployment Orchestration",
+    "version": "1.0.0",
+    "phase": "PHASE_1_INITIAL_DEPLOYMENT"
+  },
+  "agents": {
+    "claude_code_backend": {
+      "name": "Claude Code (Backend Specialist)",
+      "role": "Backend Deployment & API Configuration",
+      "status": "ACTIVE",
+      "responsibilities": [
+        "Deploy backend to Railway",
+        "Setup PostgreSQL database",
+        "Configure environment variables",
+        "Run Prisma migrations",
+        "Verify health check endpoint",
+        "Verify API endpoints (/api/candidates, /api/governorates)",
+        "Monitor backend logs",
+        "Report backend URL and status"
+      ],
+      "deliverables": {
+        "required": [
+          "Backend URL (Railway)",
+          "Health check passing (GET /health returns 200)",
+          "API endpoints operational",
+          "Database connected",
+          "Deployment logs clear of errors"
+        ],
+        "optional": [
+          "Performance metrics",
+          "API response times"
+        ]
+      },
+      "commands": {
+        "verify_deployment": "curl https://hamlet-unified-complete-2027-production.up.railway.app/health",
+        "test_candidates": "curl https://hamlet-unified-complete-2027-production.up.railway.app/api/candidates",
+        "test_governorates": "curl https://hamlet-unified-complete-2027-production.up.railway.app/api/governorates",
+        "check_logs": "railway logs"
+      },
+      "success_criteria": {
+        "health_check": "status: ok",
+        "candidates_endpoint": "returns JSON array",
+        "governorates_endpoint": "returns JSON array",
+        "database": "migrations completed",
+        "uptime": "> 99%"
+      }
+    },
+    "cursor_team_frontend": {
+      "name": "Cursor Team (Frontend Specialist)",
+      "role": "Frontend Build & Vercel Deployment",
+      "status": "PENDING",
+      "responsibilities": [
+        "Build frontend application",
+        "Configure Vercel deployment",
+        "Setup environment variables for frontend",
+        "Connect frontend to backend API",
+        "Verify frontend build success",
+        "Test frontend-backend integration",
+        "Report Vercel URL and status"
+      ],
+      "deliverables": {
+        "required": [
+          "Frontend build successful",
+          "Vercel deployment URL",
+          "Environment variables configured",
+          "Backend API connected",
+          "No build errors"
+        ],
+        "optional": [
+          "Lighthouse scores",
+          "Bundle size analysis"
+        ]
+      },
+      "commands": {
+        "build": "npm run build",
+        "deploy": "vercel --prod",
+        "verify": "curl https://iraq-election.vercel.app"
+      },
+      "success_criteria": {
+        "build": "exit code 0",
+        "deployment": "deployment successful",
+        "api_connection": "backend responding",
+        "pages_load": "all routes accessible"
+      }
+    },
+    "gemini_ai_ux": {
+      "name": "Gemini AI (UX Auditor)",
+      "role": "UX/UI Audit & Accessibility Check",
+      "status": "PENDING",
+      "responsibilities": [
+        "Audit user experience",
+        "Check accessibility compliance (WCAG 2.1)",
+        "Verify responsive design",
+        "Test navigation flow",
+        "Validate RTL (Arabic) support",
+        "Check color contrast ratios",
+        "Test keyboard navigation",
+        "Report UX issues and recommendations"
+      ],
+      "deliverables": {
+        "required": [
+          "UX audit report",
+          "Accessibility score",
+          "Critical issues list",
+          "Approval or rejection with reasons"
+        ],
+        "optional": [
+          "UX improvement suggestions",
+          "Design consistency review"
+        ]
+      },
+      "success_criteria": {
+        "accessibility": "WCAG 2.1 AA compliant",
+        "rtl_support": "Arabic text renders correctly",
+        "navigation": "intuitive and clear",
+        "responsive": "mobile, tablet, desktop",
+        "contrast": "4.5:1 minimum for text"
+      }
+    }
+  },
+  "workflow": {
+    "phase_1": {
+      "name": "Initial Deployment Kickoff",
+      "duration_max": "2 hours",
+      "parallel_tasks": true,
+      "tasks": [
+        {
+          "agent": "claude_code_backend",
+          "task": "Deploy backend to Railway",
+          "status": "IN_PROGRESS",
+          "priority": "HIGH"
+        },
+        {
+          "agent": "cursor_team_frontend",
+          "task": "Build and deploy frontend",
+          "status": "PENDING",
+          "priority": "HIGH",
+          "depends_on": []
+        },
+        {
+          "agent": "gemini_ai_ux",
+          "task": "Wait for frontend deployment",
+          "status": "WAITING",
+          "priority": "MEDIUM",
+          "depends_on": ["cursor_team_frontend"]
+        }
+      ],
+      "completion_criteria": {
+        "backend": "deployed and healthy",
+        "frontend": "built and deployed",
+        "ux": "audit approved"
+      },
+      "transition_to": "phase_2"
+    },
+    "phase_2": {
+      "name": "Integration & Testing",
+      "duration_max": "1 hour",
+      "description": "Full integration testing and verification",
+      "status": "PENDING"
+    }
+  },
+  "monitoring": {
+    "update_interval": "30 seconds",
+    "log_file": "deployment_progress.log",
+    "status_file": "deployment_status.json",
+    "notifications": {
+      "success": true,
+      "failure": true,
+      "warnings": true
+    }
+  },
+  "environment": {
+    "backend_url": "https://hamlet-unified-complete-2027-production.up.railway.app",
+    "frontend_url": "https://iraq-election.vercel.app",
+    "database": "PostgreSQL on Railway",
+    "required_env_vars": {
+      "backend": [
+        "NODE_ENV",
+        "PORT",
+        "DATABASE_URL",
+        "JWT_SECRET",
+        "ALLOWED_ORIGINS",
+        "LOG_LEVEL"
+      ],
+      "frontend": [
+        "NEXT_PUBLIC_API_URL",
+        "NEXT_PUBLIC_BACKEND_URL"
+      ]
+    }
+  }
+}
