@@ -1,9 +1,9 @@
 ﻿[build]
 builder = "nixpacks"
-buildCommand = "npm run build"
+buildCommand = "cd backend && npm install"
 
 [deploy]
-startCommand = "npm start"
+startCommand = "cd backend && node unified-server.js"
 
 [environments]
   [environments.production]
