@@ -25,10 +25,10 @@ export const SearchPortal = () => {
     const [isListening, setIsListening] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const { t, lang } = useTranslations();
-    const recognitionRef = useRef<SpeechRecognition | null>(null);
+    const recognitionRef = useRef<any>(null);
 
     useEffect(() => {
-        type RecognitionConstructor = new () => SpeechRecognition;
+        type RecognitionConstructor = new () => any;
         const browserWindow = window as typeof window & {
             SpeechRecognition?: RecognitionConstructor;
             webkitSpeechRecognition?: RecognitionConstructor;
@@ -40,7 +40,7 @@ export const SearchPortal = () => {
             return;
         }
 
-        const recognition: SpeechRecognition = new SpeechRecognitionConstructor();
+        const recognition: any = new SpeechRecognitionConstructor();
         recognition.continuous = false;
         recognition.interimResults = false;
 

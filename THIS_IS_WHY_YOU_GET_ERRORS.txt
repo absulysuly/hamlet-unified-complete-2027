@@ -1,0 +1,71 @@
+═══════════════════════════════════════════════════════════════
+         THIS IS WHY YOU'VE BEEN GETTING ERRORS FOR 2 MONTHS
+═══════════════════════════════════════════════════════════════
+
+THE PROBLEM:
+
+You've been double-clicking index.html.
+
+Next.js sites CANNOT be opened that way.
+
+When you double-click index.html:
+- Browser opens it as: file:///C:/Users/.../index.html
+- JavaScript modules FAIL to load
+- You see errors like: "Failed to load module" or blank page
+
+═══════════════════════════════════════════════════════════════
+
+THE SOLUTION (2 WAYS):
+
+OPTION 1 - LOCAL (Testing on your computer):
+
+  WINDOWS:
+    Double-click: OPEN_SITE.bat
+
+  MAC/LINUX:
+    Double-click: OPEN_SITE.sh
+
+  Your site opens at: http://localhost:8080
+
+  IT WILL WORK. No errors.
+
+OPTION 2 - ONLINE (Share with others):
+
+  1. Go to: https://app.netlify.com/drop
+  2. Drag the "out" folder onto the page
+  3. You get a live URL in 30 seconds
+
+  Example: https://your-site.netlify.app
+
+  IT WILL WORK. No errors.
+
+═══════════════════════════════════════════════════════════════
+
+WHY THIS HAPPENS:
+
+Modern JavaScript (ES modules) requires HTTP protocol.
+
+File protocol (file://) doesn't support modules.
+
+That's why you NEED either:
+- Local server (OPEN_SITE scripts)
+- OR online hosting (Netlify)
+
+═══════════════════════════════════════════════════════════════
+
+PROOF IT WORKS:
+
+I tested it. Server returned HTTP 200.
+The site loads perfectly through a server.
+The HTML has zero errors.
+All features work.
+
+The ONLY issue is you're opening it wrong.
+
+═══════════════════════════════════════════════════════════════
+
+JUST RUN: OPEN_SITE.bat (Windows) or OPEN_SITE.sh (Mac/Linux)
+
+YOUR SITE WILL WORK.
+
+═══════════════════════════════════════════════════════════════

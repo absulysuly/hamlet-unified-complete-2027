@@ -1,9 +1,8 @@
 ﻿/** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
-  experimental: {
-    appDir: true,
-  },
+  output: 'export',
+  trailingSlash: true,
+  distDir: 'out',
   typescript: {
     ignoreBuildErrors: false,
   },
@@ -16,4 +15,4 @@ const nextConfig = {
   }
 }
 
-module.exports = nextConfig
+export default nextConfig
