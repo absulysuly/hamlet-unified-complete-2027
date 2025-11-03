@@ -1,11 +1,12 @@
 [build]
-  publish = "dist"
-  command = "npm run build"
+  publish = ".next"
+  command = "PUPPETEER_SKIP_DOWNLOAD=true npm install && npm run build"
+
+[build.environment]
+  NODE_VERSION = "20"
+  PUPPETEER_SKIP_DOWNLOAD = "true"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-[build.environment]
-  NODE_VERSION = "18"

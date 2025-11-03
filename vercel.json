@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "PUPPETEER_SKIP_DOWNLOAD=true npm install",
+  "framework": "nextjs",
+  "outputDirectory": ".next",
+  "regions": ["iad1"],
+  "env": {
+    "PUPPETEER_SKIP_DOWNLOAD": "true"
+  }
+}
