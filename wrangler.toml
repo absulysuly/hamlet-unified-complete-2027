@@ -1,0 +1,7 @@
+name = "hamlet-election-api"
+main = "cloudflare-worker.js"
+compatibility_date = "2025-11-03"
+
+# Workers Sites for static hosting (optional)
+[env.production]
+name = "hamlet-election-api"
