@@ -1,0 +1,20 @@
+{
+  "$schema": "https://developers.cloudflare.com/pages/platform/build-configuration",
+  "build": {
+    "command": "npm run build",
+    "output": "out",
+    "rootDirectory": "",
+    "env": {
+      "NODE_VERSION": "18"
+    }
+  },
+  "deployment": {
+    "compatibility_date": "2025-11-03",
+    "env": {
+      "NEXT_PUBLIC_API_URL": "https://hamlet-unified-complete-2027-production.up.railway.app",
+      "NEXT_PUBLIC_API_BASE_URL": "https://hamlet-unified-complete-2027-production.up.railway.app",
+      "NEXT_PUBLIC_BACKUP_API": "https://winter-leaf-f532.safaribosafar.workers.dev",
+      "NEXT_PUBLIC_APP_NAME": "Hamlet Election Platform"
+    }
+  }
+}
