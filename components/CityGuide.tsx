@@ -87,7 +87,11 @@ export const CityGuide = () => {
            },
         });
 
-        const jsonStr = response.text.trim();
+        const jsonStr = response.text?.trim();
+        if (!jsonStr) {
+          setError(t('cityGuide.generateError'));
+          return;
+        }
         const plan = JSON.parse(jsonStr);
         setJourneyPoints(plan.waypoints);
           
