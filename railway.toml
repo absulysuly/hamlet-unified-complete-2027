@@ -1,14 +1,7 @@
-# ✅ Production configuration for hamlet-unified-complete-2027 backend
-
+# railway.toml
 [build]
 builder = "NIXPACKS"
-buildCommand = "cd backend && npm install"
+buildCommand = "cd backend && npm install && npm run build"
 
-[deploy]
-startCommand = "cd backend && node server.mjs"
-healthcheckPath = "/api/health"
-healthcheckTimeout = 300
-
-[env]
-NODE_ENV = "production"
-PORT = "5000"
+[start]
+command = "cd backend && npm start"
