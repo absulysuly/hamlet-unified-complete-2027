@@ -10,15 +10,15 @@
     "db:push": "prisma db push",
     "import:candidates": "ts-node scripts/import-candidates.ts"
   },
-  "dependencies": {
-    "express": "^4.19.2",
-    "cors": "^2.8.5",
-    "csv-parse": "^5.5.2"
-  },
-  "devDependencies": {
-    "@prisma/client": "^6.19.0",
-    "prisma": "^6.19.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.0.0"
-  }
+ "dependencies": {
+  "express": "^4.19.2",
+  "cors": "^2.8.5",
+  "csv-parse": "^5.5.2",
+  "typescript": "^5.0.0",
+  "ts-node": "^10.9.2"
+},
+"devDependencies": {
+  "@prisma/client": "^6.19.0",
+  "prisma": "^6.19.0"
 }
+
