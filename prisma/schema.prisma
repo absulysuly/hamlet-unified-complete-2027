@@ -1,0 +1,94 @@
+// ===============================
+//  HAMLET UNIFIED ELECTION SCHEMA
+//  Version: 2027-11-09
+// ===============================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite" // or "postgresql" if using Supabase later
+  url      = env("DATABASE_URL")
+}
+
+// ===============================
+//  CORE ELECTION MODELS
+// ===============================
+
+model Candidate {
+  id             Int          @id @default(autoincrement())
+  name           String
+  governorate    String?
+  party          String?
+  biography      String?
+  imageUrl       String?
+  socialMedia    Json?
+  status         String?      @default("pending")
+  votes          Int?         @default(0)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  // Relations
+  governorateRef Governorate? @relation(fields: [governorateId], references: [id])
+  governorateId   Int?
+
+  partyRef        Party?       @relation(fields: [partyId], references: [id])
+  partyId         Int?
+
+  // Indexes for speed
+  @@index([name])
+  @@index([party])
+  @@index([governorate])
+}
+
+model Party {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  ideology    String?
+  color       String?
+  logoUrl     String?
+  foundedYear Int?
+  candidates  Candidate[]
+}
+
+model Governorate {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  region      String?
+  population  Int?
+  candidates  Candidate[]
+}
+
+// ===============================
+//  SYSTEM MODELS
+// ===============================
+model User {
+  id        Int             @id @default(autoincrement())
+  name      String
+  email     String?         @unique
+  password  String?
+  role      String?         @default("citizen")
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  // ✅ Added this line to complete the relation
+  activityLogs ActivityLog[]
+}
+
+model ActivityLog {
+  id        Int      @id @default(autoincrement())
+  action    String
+  details   String?
+  userId    Int?
+  createdAt DateTime @default(now())
+
+  // ✅ Relation properly linked to User
+  user      User?    @relation(fields: [userId], references: [id])
+}
+
+// ===============================
+//  INDEXES & PERFORMANCE
+// ===============================
+
+// (All key indexes are declared inline with their models above)

@@ -1,0 +1,20 @@
+{
+  "name": "hamlet-unified-complete-2027",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.ts",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "import:candidates": "ts-node scripts/import-candidates.ts"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "csv-parse": "^5.5.2",
+    "@prisma/client": "^5.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.2"
+  }
+}

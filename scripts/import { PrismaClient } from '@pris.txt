@@ -1,0 +1,46 @@
+import { PrismaClient } from '@prisma/client';
+import fs from 'fs';
+import path from 'path';
+import { parse } from 'csv-parse/sync';
+
+const prisma = new PrismaClient();
+
+async function main() {
+  const dataDir = path.join(process.cwd(), 'data');
+  const csvFile = fs.readdirSync(dataDir).find(f => f.endsWith('.csv'));
+  if (!csvFile) throw new Error('No CSV found in /data directory.');
+
+  const content = fs.readFileSync(path.join(dataDir, csvFile), 'utf8');
+  const records = parse(content, { columns: true, skip_empty_lines: true });
+
+  console.log(`📊 Found ${records.length} records. Importing...`);
+
+  let created = 0, updated = 0;
+  for (const rec of records) {
+    const existing = await prisma.candidate.findFirst({
+      where: { name: rec.name },
+    });
+    if (existing) {
+      await prisma.candidate.update({
+        where: { id: existing.id },
+        data: rec,
+      });
+      updated++;
+    } else {
+      await prisma.candidate.create({ data: rec });
+      created++;
+    }
+  }
+
+  console.log(`✅ Import complete: Created ${created}, Updated ${updated}`);
+  fs.writeFileSync(`reports/import-summary-${Date.now()}.md`,
+    `# Import Summary\nCreated: ${created}\nUpdated: ${updated}\nTotal: ${records.length}`
+  );
+}
+
+main()
+  .catch(e => {
+    console.error('❌ Import failed:', e);
+    process.exit(1);
+  })
+  .finally(() => prisma.$disconnect());
