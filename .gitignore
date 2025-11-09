@@ -1,0 +1,8 @@
+__pycache__/
+node_modules/**/node_modules/
+output/*.json
+output/*.csv
+raw_pages/*.html
+mega_executor.log
+extraction_log.jsonl
+scripts/node_modules/
