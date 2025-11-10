@@ -23,8 +23,8 @@ class ScrubberConfig:
     base_url: str = "https://ihec.iq/13735-2/"
     raw_dir: Path = Path("raw_pages")
     output_dir: Path = Path("output")
-    log_file: Path = Path("mega_executor.log")
-    extraction_log: Path = Path("extraction_log.jsonl")
+    log_file: Path = Path("output/mega_executor.log")
+    extraction_log: Path = Path("output/extraction_log.jsonl")
     max_workers: int = 4
     user_agent: str = DEFAULT_USER_AGENT
     rate_limit_sleep: float = 1.5
@@ -50,7 +50,6 @@ def _load_env_file() -> None:
     """Load an optional .env file located in the project root."""
     if load_dotenv is None:
         return
-    # Attempt to load from current working directory or parent.
     cwd = Path.cwd()
     candidates = [cwd / ".env", cwd.parent / ".env"]
     for candidate in candidates:

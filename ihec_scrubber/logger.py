@@ -16,7 +16,7 @@ def _utcnow_iso() -> str:
 
 @dataclass
 class ScrubberLogger:
-    """A lightweight structured logger that writes JSON lines to disk."""
+    """A lightweight structured logger that writes newline-delimited JSON."""
 
     log_file: Path
 
