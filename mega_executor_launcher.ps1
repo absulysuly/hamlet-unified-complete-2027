@@ -1,52 +1,95 @@
 Param(
-    [int]$Workers = 4,
-    [switch]$InstallWebDriver
+    [int]$Workers = 4
 )
 
 $ErrorActionPreference = "Stop"
 
-if (-not (Test-Path ".venv")) {
-    Write-Host "Creating virtual environment..."
-    python -m venv .venv
+$global:LauncherMetrics = @()
+
+function Add-Metric {
+    param(
+        [string]$Name,
+        [TimeSpan]$Duration,
+        [string]$Status
+    )
+
+    $global:LauncherMetrics += [PSCustomObject]@{
+        stage     = $Name
+        duration  = [math]::Round($Duration.TotalSeconds, 3)
+        status    = $Status
+        timestamp = (Get-Date).ToString("o")
+    }
 }
 
-Write-Host "Activating virtual environment"
-. .\.venv\Scripts\Activate.ps1
+function Invoke-Step {
+    param(
+        [string]$Name,
+        [scriptblock]$Action
+    )
 
-Write-Host "Installing requirements"
-pip install --upgrade pip
-pip install -r requirements.txt
-
-if ($InstallWebDriver) {
-    Write-Host "Ensuring ChromeDriver is available via webdriver-manager"
-    python - <<'PYCODE'
-from webdriver_manager.chrome import ChromeDriverManager
-ChromeDriverManager().install()
-PYCODE
+    $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+    $status = "success"
+    try {
+        & $Action.Invoke()
+        if ($LASTEXITCODE -ne 0) {
+            throw "Step '$Name' exited with code $LASTEXITCODE"
+        }
+    }
+    catch {
+        $status = "failure"
+        Write-Error $_
+        throw
+    }
+    finally {
+        $stopwatch.Stop()
+        Add-Metric -Name $Name -Duration $stopwatch.Elapsed -Status $status
+    }
 }
 
-Write-Host "Running IHEC Mega Scrubber"
-python run_scrubber.py run --workers $Workers
+try {
+    if (-not (Test-Path ".venv")) {
+        Write-Host "Creating virtual environment..."
+        python -m venv .venv
+    }
 
-$destinationRoot = "E:\HamletUnified\IHEC_Extractor"
-$outputDest = Join-Path $destinationRoot "output"
-$rawDest = Join-Path $destinationRoot "raw_pages"
-New-Item -ItemType Directory -Force -Path $outputDest | Out-Null
-New-Item -ItemType Directory -Force -Path $rawDest | Out-Null
+    Write-Host "Activating virtual environment"
+    . .\.venv\Scripts\Activate.ps1
 
-Copy-Item -Path .\output\* -Destination $outputDest -Force
-Copy-Item -Path .\raw_pages\* -Destination $rawDest -Force
-Copy-Item -Path .\extraction_log.jsonl -Destination $destinationRoot -Force -ErrorAction SilentlyContinue
-Copy-Item -Path .\mega_executor.log -Destination $destinationRoot -Force -ErrorAction SilentlyContinue
+    Invoke-Step -Name "install_requirements" -Action {
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    }
 
-$timestamp = Get-Date -Format "yyyyMMdd_HHmm"
-$zipPath = Join-Path $destinationRoot ("IHEC_extract_{0}.zip" -f $timestamp)
-if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
-$itemsToZip = @($outputDest, $rawDest)
-$logPath = Join-Path $destinationRoot "mega_executor.log"
-$extractLogPath = Join-Path $destinationRoot "extraction_log.jsonl"
-if (Test-Path $logPath) { $itemsToZip += $logPath }
-if (Test-Path $extractLogPath) { $itemsToZip += $extractLogPath }
-Compress-Archive -Path $itemsToZip -DestinationPath $zipPath -Force
+    Invoke-Step -Name "dry_run" -Action {
+        python run_scrubber.py dry-run
+    }
 
-Write-Host "Artifacts archived to $zipPath"
+    Invoke-Step -Name "full_run" -Action {
+        python run_scrubber.py run --workers $Workers
+    }
+
+    if (-not (Test-Path "output")) {
+        New-Item -ItemType Directory -Path "output" | Out-Null
+    }
+
+    $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+    $zipPath = Join-Path (Get-Location) ("IHEC_extract_{0}.zip" -f $timestamp)
+    if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
+
+    Invoke-Step -Name "archive_outputs" -Action {
+        Compress-Archive -Path (Join-Path (Get-Location) "output\*") -DestinationPath $zipPath -Force
+    }
+
+    Write-Host "Artifacts archived to $zipPath"
+}
+finally {
+    if (-not (Test-Path "output")) {
+        New-Item -ItemType Directory -Path "output" | Out-Null
+    }
+    $metricsPath = Join-Path (Get-Location) "output\launcher_metrics.jsonl"
+    if (Test-Path $metricsPath) { Remove-Item $metricsPath -Force }
+    $LauncherMetrics | ForEach-Object {
+        $_ | ConvertTo-Json -Compress | Out-File -FilePath $metricsPath -Encoding utf8 -Append
+    }
+    Write-Host "Metrics written to $metricsPath"
+}
