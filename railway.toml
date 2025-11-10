@@ -3,4 +3,4 @@ builder = "NIXPACKS"
 buildCommand = "npm install && npm run build"
 
 [start]
-command = "npm start"
+command = "node dist/server.js"
